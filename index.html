@@ -1,25 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <title>Mon Portfolio</title>
+  <meta charset="UTF-8">
+  <title>Portfolio - BTS SIO SLAM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 20px 10%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.9);
+      position: sticky;
+      top: 0;
+    }
+
+    header h1 {
+      color: #38bdf8;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #fff;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #38bdf8;
+    }
+
+    section {
+      padding: 80px 10%;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 90vh;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+    }
+
+    .hero span {
+      color: #38bdf8;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #38bdf8;
+      border: none;
+      color: #000;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #020617;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Mon Portfolio BTS SIO SLAM</h1>
 
-  <h2>Présentation</h2>
-  <p>Je suis étudiant en BTS SIO option SLAM...</p>
+<header>
+  <h1>MonPortfolio</h1>
+  <nav>
+    <a href="#about">À propos</a>
+    <a href="#skills">Compétences</a>
+    <a href="#projects">Projets</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
+<section class="hero">
+  <h2>Salut, moi c'est <span>Ton Nom</span></h2>
+  <p>Étudiant en BTS SIO option SLAM, passionné par le développement.</p>
+  <button class="btn" onclick="scrollToSection('projects')">Voir mes projets</button>
+</section>
+
+<section id="about">
+  <h2>À propos</h2>
+  <p>
+    Je suis actuellement en 2ème année de BTS SIO SLAM.
+    J'aime développer des applications web et apprendre de nouvelles technologies.
+  </p>
+</section>
+
+<section id="skills">
   <h2>Compétences</h2>
-  <ul>
-    <li>Java</li>
-    <li>PHP</li>
-    <li>SQL</li>
-  </ul>
+  <div class="cards">
+    <div class="card">HTML / CSS</div>
+    <div class="card">JavaScript</div>
+    <div class="card">PHP</div>
+    <div class="card">SQL</div>
+    <div class="card">Java</div>
+  </div>
+</section>
 
+<section id="projects">
   <h2>Projets</h2>
-  <p>Application de gestion...</p>
+  <div class="cards">
+    <div class="card">
+      <h3>Application de gestion</h3>
+      <p>Projet BTS en PHP & MySQL</p>
+    </div>
 
+    <div class="card">
+      <h3>Site e-commerce</h3>
+      <p>Projet personnel en JavaScript</p>
+    </div>
+
+    <div class="card">
+      <h3>API REST</h3>
+      <p>Projet en Java</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
   <h2>Contact</h2>
-  <p>Email : ...</p>
+  <p>Email : tonemail@gmail.com</p>
+</section>
+
+<footer>
+  <p>© 2026 - Ton Nom</p>
+</footer>
+
+<script>
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+  }
+</script>
+
 </body>
 </html>
