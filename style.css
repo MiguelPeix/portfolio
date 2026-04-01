@@ -21,6 +21,22 @@ body {
   transition: 0.3s;
 }
 
+h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+h2::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--primary);
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
 header {
   display: flex;
   justify-content: space-between;
@@ -45,14 +61,35 @@ nav a {
 }
 
 section {
-  padding: 60px 10%;
+  padding: 80px 10%;
+  position: relative;
+  scroll-margin-top: 100px;
+}
+
+section:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.light section:nth-child(even) {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+section:not(:last-child)::after {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 1px;
+  margin: 60px auto 0;
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+  opacity: 0.5;
 }
 
 .hero {
-  height: 80vh;
+  height: 85vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .cards {
@@ -65,8 +102,9 @@ section {
   padding: 20px;
   background: var(--card);
   color: var(--text);
-  border-radius: 10px;
+  border-radius: 12px;
   transition: 0.3s;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
 .card:hover {
