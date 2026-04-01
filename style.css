@@ -1,12 +1,17 @@
 :root {
   --bg: #0f172a;
-  --text: #fff;
+  --text: #ffffff;
   --primary: #38bdf8;
+  --card: #1e293b;
+  --input: #1e293b;
 }
 
 .light {
-  --bg: #ffffff;
-  --text: #000;
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --primary: #0ea5e9;
+  --card: #ffffff;
+  --input: #ffffff;
 }
 
 body {
@@ -58,7 +63,8 @@ section {
 
 .card {
   padding: 20px;
-  background: #1e293b;
+  background: var(--card);
+  color: var(--text);
   border-radius: 10px;
   transition: 0.3s;
 }
@@ -78,6 +84,8 @@ input, textarea {
   padding: 10px;
   border-radius: 5px;
   border: none;
+  background: var(--input);
+  color: var(--text);
 }
 
 /* ANIMATION */
@@ -118,7 +126,7 @@ input, textarea {
 }
 
 .timeline-card {
-  background: #1e293b;
+  background: var(--card);
   padding: 20px;
   border-left: 5px solid var(--primary);
   border-radius: 8px;
@@ -143,13 +151,8 @@ input, textarea {
 
 .contact-form input,
 .contact-form textarea {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  border: none;
-  background: #1e293b;
-  color: white;
+  background: var(--input);
+  color: var(--text);
 }
 
 .contact-form button {
@@ -167,4 +170,8 @@ input, textarea {
 
 .contact-info {
   margin-top: 20px;
+}
+
+.card, .timeline-card, input, textarea {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
