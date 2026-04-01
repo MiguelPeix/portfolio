@@ -5,23 +5,22 @@
   <title>Portfolio BTS SIO SLAM</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- Icons -->
-  <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <script src="https://kit.fontawesome.com/7a4b8c5c6f.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
 
 <header>
-  <h1>Portfolio</h1>
+  <h1>Mon Portfolio</h1>
 
-  <nav id="nav">
-    <a href="#about">Moi</a>
+  <nav>
+    <a href="#about">Parcours</a>
     <a href="#bts">BTS SIO</a>
     <a href="#skills">Compétences</a>
     <a href="#projects">Projets</a>
@@ -34,84 +33,119 @@
 
 <section class="hero reveal">
   <h2>Salut, moi c'est <span>Miguel</span></h2>
-  <p>Étudiant en BTS SIO SLAM</p>
+  <p>Étudiant en BTS SIO option SLAM</p>
 </section>
 
+<!-- PARCOURS -->
 <section id="about" class="reveal">
-  <h2>👨‍🎓 Parcours</h2>
+  <h2>🎓 Mon parcours</h2>
 
   <h3>Parcours scolaire</h3>
-  <p>Bac ..., BTS SIO SLAM...</p>
+  <div class="timeline">
+    <div class="timeline-card">
+      <h4>BTS SIO SLAM</h4>
+      <p>2024 - 2026</p>
+      <p>Développement web et logiciel</p>
+    </div>
+
+    <div class="timeline-card">
+      <h4>Baccalauréat</h4>
+      <p>2023</p>
+      <p>Spécialité à compléter</p>
+    </div>
+  </div>
 
   <h3>Parcours professionnel</h3>
-  <p>Stage 1 : ...</p>
-  <p>Stage 2 : ...</p>
+  <div class="timeline">
+    <div class="timeline-card">
+      <h4>Stage Développeur</h4>
+      <p>Entreprise X - 2025</p>
+      <p>Développement d'une application web</p>
+    </div>
+
+    <div class="timeline-card">
+      <h4>Stage Informatique</h4>
+      <p>Entreprise Y - 2024</p>
+      <p>Maintenance et support</p>
+    </div>
+  </div>
 </section>
 
+<!-- BTS -->
 <section id="bts" class="reveal">
   <h2>💻 BTS SIO</h2>
-  <p>Le BTS SIO propose 2 options :</p>
-  <ul>
-    <li>SISR : Réseaux</li>
-    <li>SLAM : Développement</li>
-  </ul>
-  <p>J’ai choisi l’option SLAM spécialisée en développement.</p>
+
+  <p>
+    Le BTS Services Informatiques aux Organisations (SIO) est une formation en 2 ans
+    qui forme des professionnels de l’informatique capables de répondre aux besoins
+    des entreprises en développement ou en administration réseau.
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <h3>SISR</h3>
+      <p>
+        Solutions d’Infrastructure, Systèmes et Réseaux. Cette option forme des
+        administrateurs réseau capables de gérer les serveurs, la cybersécurité
+        et les infrastructures.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>SLAM</h3>
+      <p>
+        Solutions Logicielles et Applications Métiers. Cette option est orientée
+        développement : création de sites web, applications, bases de données.
+        C’est l’option que j’ai choisie.
+      </p>
+    </div>
+  </div>
 </section>
 
+<!-- COMPETENCES -->
 <section id="skills" class="reveal">
   <h2>🚀 Compétences</h2>
 
   <h3>Langages</h3>
-  <div class="cards">
-    <div class="card">Java</div>
-    <div class="card">JavaScript</div>
-    <div class="card">HTML</div>
-    <div class="card">CSS</div>
-    <div class="card">PHP</div>
-    <div class="card">SQL</div>
-    <div class="card">Python</div>
+  <div class="cards spaced">
+    <div class="card"><i class="fab fa-java"></i> Java</div>
+    <div class="card"><i class="fab fa-js"></i> JavaScript</div>
+    <div class="card"><i class="fab fa-html5"></i> HTML</div>
+    <div class="card"><i class="fab fa-css3-alt"></i> CSS</div>
+    <div class="card"><i class="fab fa-php"></i> PHP</div>
+    <div class="card"><i class="fas fa-database"></i> SQL</div>
+    <div class="card"><i class="fab fa-python"></i> Python</div>
   </div>
 
   <h3>Outils / Frameworks</h3>
-  <div class="cards">
-    <div class="card">VS Code</div>
-    <div class="card">NetBeans</div>
-    <div class="card">WordPress + Bricks</div>
-    <div class="card">WAMP</div>
-    <div class="card">GitHub</div>
+  <div class="cards spaced">
+    <div class="card"><i class="fas fa-code"></i> VS Code</div>
+    <div class="card"><i class="fas fa-laptop-code"></i> NetBeans</div>
+    <div class="card"><i class="fab fa-wordpress"></i> WordPress</div>
+    <div class="card"><i class="fas fa-server"></i> WAMP</div>
+    <div class="card"><i class="fab fa-github"></i> GitHub</div>
   </div>
 </section>
 
-<section id="projects" class="reveal">
-  <h2>📂 Projets</h2>
-  <div class="cards">
-    <div class="card">Projet 1</div>
-    <div class="card">Projet 2</div>
-    <div class="card">Projet 3</div>
-  </div>
-</section>
-
-<section id="veille" class="reveal">
-  <h2>🧠 Veille informatique</h2>
-  <p>Je réalise une veille sur : IA, cybersécurité, développement web...</p>
-</section>
-
+<!-- CONTACT -->
 <section id="contact" class="reveal">
   <h2>📞 Contact</h2>
 
-  <form>
+  <form class="contact-form">
     <input type="text" placeholder="Nom" required>
     <input type="email" placeholder="Email" required>
-    <textarea placeholder="Message"></textarea>
+    <textarea placeholder="Votre message..." required></textarea>
     <button type="submit">Envoyer</button>
   </form>
 
-  <p>Email : peixotomiguel9@gmail.com</p>
-  <p>Téléphone : 06 13 64 54 68</p>
+  <div class="contact-info">
+    <p><i class="fas fa-envelope"></i> peixotomiguel9@gmail.com</p>
+    <p><i class="fas fa-phone"></i> 06 13 64 54 68</p>
+  </div>
 </section>
 
 <footer>
-  <p>© 2026 - Miguel Peixoto</p>
+  <p>© 2026 - Peixoto Miguel</p>
 </footer>
 
 <script src="script.js"></script>
