@@ -2,87 +2,119 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Portfolio - BTS SIO SLAM</title>
+  <title>Portfolio BTS SIO SLAM</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-
-  <!-- CSS externe -->
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Icons -->
+  <script src="https://kit.fontawesome.com/yourcode.js" crossorigin="anonymous"></script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
 <header>
-  <h1>Mon Portfolio</h1>
-  <nav>
-    <a href="#about">À propos</a>
+  <h1>Portfolio</h1>
+
+  <nav id="nav">
+    <a href="#about">Moi</a>
+    <a href="#bts">BTS SIO</a>
     <a href="#skills">Compétences</a>
     <a href="#projects">Projets</a>
+    <a href="#veille">Veille</a>
     <a href="#contact">Contact</a>
   </nav>
+
+  <button id="theme-toggle">🌙</button>
 </header>
 
-<section class="hero">
-  <h2>Salut, moi c'est <span>Miguel</span></h2>
-  <p>Étudiant en BTS SIO option SLAM, passionné par le développement.</p>
-  <button class="btn" onclick="scrollToSection('projects')">Voir mes projets</button>
+<section class="hero reveal">
+  <h2>Salut, moi c'est <span>Ton Nom</span></h2>
+  <p>Étudiant en BTS SIO SLAM</p>
 </section>
 
-<section id="about">
-  <h2>À propos</h2>
-  <p>
-    Je suis actuellement en 2ème année de BTS SIO SLAM.
-    J'aime développer des applications web et apprendre de nouvelles technologies.
-  </p>
+<section id="about" class="reveal">
+  <h2>👨‍🎓 Parcours</h2>
+
+  <h3>Parcours scolaire</h3>
+  <p>Bac ..., BTS SIO SLAM...</p>
+
+  <h3>Parcours professionnel</h3>
+  <p>Stage 1 : ...</p>
+  <p>Stage 2 : ...</p>
 </section>
 
-<section id="skills">
-  <h2>Compétences</h2>
+<section id="bts" class="reveal">
+  <h2>💻 BTS SIO</h2>
+  <p>Le BTS SIO propose 2 options :</p>
+  <ul>
+    <li>SISR : Réseaux</li>
+    <li>SLAM : Développement</li>
+  </ul>
+  <p>J’ai choisi l’option SLAM spécialisée en développement.</p>
+</section>
+
+<section id="skills" class="reveal">
+  <h2>🚀 Compétences</h2>
+
+  <h3>Langages</h3>
   <div class="cards">
-    <div class="card">HTML / CSS</div>
+    <div class="card">Java</div>
     <div class="card">JavaScript</div>
+    <div class="card">HTML</div>
+    <div class="card">CSS</div>
     <div class="card">PHP</div>
     <div class="card">SQL</div>
-    <div class="card">Java</div>
+    <div class="card">Python</div>
   </div>
-</section>
 
-<section id="projects">
-  <h2>Projets</h2>
+  <h3>Outils / Frameworks</h3>
   <div class="cards">
-    <div class="card">
-      <h3>Application de gestion</h3>
-      <p>Projet BTS en PHP & MySQL</p>
-    </div>
-
-    <div class="card">
-      <h3>Site e-commerce</h3>
-      <p>Projet personnel en JavaScript</p>
-    </div>
-
-    <div class="card">
-      <h3>API REST</h3>
-      <p>Projet en Java</p>
-    </div>
+    <div class="card">VS Code</div>
+    <div class="card">NetBeans</div>
+    <div class="card">WordPress + Bricks</div>
+    <div class="card">WAMP</div>
+    <div class="card">GitHub</div>
   </div>
 </section>
 
-<section id="contact">
-  <h2>Contact</h2>
-  <p>Email : mipeixoto@stpbb.org</p>
+<section id="projects" class="reveal">
+  <h2>📂 Projets</h2>
+  <div class="cards">
+    <div class="card">Projet 1</div>
+    <div class="card">Projet 2</div>
+    <div class="card">Projet 3</div>
+  </div>
+</section>
+
+<section id="veille" class="reveal">
+  <h2>🧠 Veille informatique</h2>
+  <p>Je réalise une veille sur : IA, cybersécurité, développement web...</p>
+</section>
+
+<section id="contact" class="reveal">
+  <h2>📞 Contact</h2>
+
+  <form>
+    <input type="text" placeholder="Nom" required>
+    <input type="email" placeholder="Email" required>
+    <textarea placeholder="Message"></textarea>
+    <button type="submit">Envoyer</button>
+  </form>
+
+  <p>Email : peixotomiguel9@gmail.com</p>
+  <p>Téléphone : 06 13 64 54 68</p>
 </section>
 
 <footer>
-  <p>© 2026 - Miguel</p>
+  <p>© 2026 - Miguel Peixoto</p>
 </footer>
 
-<script>
-  function scrollToSection(id) {
-    document.getElementById(id).scrollIntoView({ behavior: "smooth" });
-  }
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
