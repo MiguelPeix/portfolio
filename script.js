@@ -11,6 +11,118 @@ function checkReveal() {
 window.addEventListener("scroll", checkReveal);
 checkReveal();
 
+// ─── Hero canvas animation ────────────────────────────────────────────────────
+const canvas = document.getElementById("hero-canvas");
+const ctx = canvas.getContext("2d");
+
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+
+function isLight() {
+  return document.body.classList.contains("light");
+}
+
+function randomBetween(a, b) {
+  return a + Math.random() * (b - a);
+}
+
+function createParticles() {
+  particles = [];
+  const count = Math.floor((canvas.width * canvas.height) / 12000);
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: randomBetween(0, canvas.width),
+      y: randomBetween(0, canvas.height),
+      r: randomBetween(1, 3.5),
+      speedX: randomBetween(-0.3, 0.3),
+      speedY: randomBetween(-0.4, -0.1),
+      opacity: randomBetween(0.2, 0.7),
+    });
+  }
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Fond dégradé radial selon le thème
+  const light = isLight();
+  const grad = ctx.createRadialGradient(
+    canvas.width * 0.2, canvas.height * 0.2, 0,
+    canvas.width * 0.2, canvas.height * 0.2, canvas.width * 0.7
+  );
+  if (light) {
+    grad.addColorStop(0, "rgba(14,165,233,0.08)");
+    grad.addColorStop(1, "rgba(248,250,252,0)");
+  } else {
+    grad.addColorStop(0, "rgba(56,189,248,0.12)");
+    grad.addColorStop(1, "rgba(15,23,42,0)");
+  }
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Particules
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = light
+      ? `rgba(14,165,233,${p.opacity})`
+      : `rgba(56,189,248,${p.opacity})`;
+    ctx.fill();
+
+    // Déplacement
+    p.x += p.speedX;
+    p.y += p.speedY;
+
+    // Reset quand la particule sort par le haut
+    if (p.y < -10) {
+      p.y = canvas.height + 10;
+      p.x = randomBetween(0, canvas.width);
+    }
+    if (p.x < -10) p.x = canvas.width + 10;
+    if (p.x > canvas.width + 10) p.x = -10;
+  });
+
+  // Lignes entre particules proches
+  particles.forEach((p, i) => {
+    particles.slice(i + 1).forEach(p2 => {
+      const dx = p.x - p2.x;
+      const dy = p.y - p2.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.strokeStyle = light
+          ? `rgba(14,165,233,${0.08 * (1 - dist / 100)})`
+          : `rgba(56,189,248,${0.15 * (1 - dist / 100)})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    });
+  });
+
+  requestAnimationFrame(drawParticles);
+}
+
+resizeCanvas();
+createParticles();
+drawParticles();
+
+window.addEventListener("resize", () => {
+  resizeCanvas();
+  createParticles();
+});
+
+// Recalcule les couleurs au changement de thème
+const _origToggle = toggle.onclick;
+toggle.onclick = (e) => {
+  _origToggle(e);
+};
+
 
 // ─── Dark mode ───────────────────────────────────────────────────────────────
 const toggle = document.getElementById("theme-toggle");
