@@ -411,3 +411,20 @@ nav a.active {
   opacity: 0.5;
   padding: 40px 0;
 }
+
+/* Tags harm types */
+.veille-harm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.harm-tag {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}

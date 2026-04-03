@@ -76,52 +76,55 @@ window.addEventListener("scroll", () => {
 backTop.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
 
-// ─── Veille RSS ───────────────────────────────────────────────────────────────
-const RSS_FEEDS = [
-  {
-    category: "ia",
-    label: "Intelligence Artificielle",
-    url: "https://corsproxy.io/?https://hnrss.org/newest?q=artificial+intelligence&count=4",
-  },
-  {
-    category: "cyber",
-    label: "Cybersécurité",
-    url: "https://corsproxy.io/?https://hnrss.org/newest?q=cybersecurity&count=4",
-  },
-  {
-    category: "dev",
-    label: "Développement Web",
-    url: "https://corsproxy.io/?https://hnrss.org/newest?q=web+development&count=4",
-  },
-];
+// ─── Veille RSS — API OCDE Incidents IA ──────────────────────────────────────
 
 let allArticles = [];
 let activeCategory = "all";
 
-async function fetchFeed(feed) {
+function dateENtoFR(date) {
+  const list = date.split('-');
+  const mois = {
+    "01":"Janvier","02":"Février","03":"Mars","04":"Avril",
+    "05":"Mai","06":"Juin","07":"Juillet","08":"Août",
+    "09":"Septembre","10":"Octobre","11":"Novembre","12":"Décembre"
+  };
+  return `${list[2]} ${mois[list[1]]} ${list[0]}`;
+}
+
+async function fetchOCDE(searchTerm, category, label) {
   try {
-    const res = await fetch(feed.url);
-    if (!res.ok) return [];
-    const text = await res.text();
-
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(text, "text/xml");
-    const items = [...xml.querySelectorAll("item")].slice(0, 4);
-
-    return items.map(item => ({
-      category: feed.category,
-      label: feed.label,
-      title: item.querySelector("title")?.textContent || "",
-      description: item.querySelector("description")?.textContent
-        ?.replace(/<[^>]*>/g, "").slice(0, 150) + "…",
-      link: item.querySelector("link")?.textContent || "",
-      date: item.querySelector("pubDate")?.textContent
-        ? new Date(item.querySelector("pubDate").textContent).toLocaleDateString("fr-FR")
-        : "",
-      source: xml.querySelector("channel > title")?.textContent || "",
+    const res = await fetch('https://incidents-server.oecdai.org/api/v1/incidents/fetch-incidents', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        and_condition: false,
+        countries: [],
+        format: 'JSON',
+        from_date: "1900-01-01",
+        to_date: new Date().toISOString().split('T')[0],
+        num_results: 4,
+        order_by: 'date',
+        properties_config: {
+          ai_tasks: [], autonomy_levels: [], business_functions: [],
+          harm_levels: [], harm_types: [], harmed_entities: [],
+          industries: [], languages: [], principles: []
+        },
+        search_terms: searchTerm ? [{ type: "KEYWORD", value: searchTerm }] : []
+      })
+    });
+    const data = await res.json();
+    return (data.incidents || []).map(item => ({
+      category,
+      label,
+      title: item.title || "",
+      description: item.summary?.slice(0, 150) + "…" || "",
+      date: item.date ? dateENtoFR(item.date) : "",
+      source: "OCDE AI Incidents",
+      link: `https://oecd.ai/en/incidents/${item.id}`,
+      harmTypes: item.properties?.harm_types || [],
     }));
   } catch (err) {
-    console.error("Erreur feed :", feed.url, err);
+    console.error("Erreur OCDE :", err);
     return [];
   }
 }
@@ -143,10 +146,14 @@ function renderArticles(articles) {
         <span class="badge badge-${a.category}">${a.label}</span>
         <h3>${a.title}</h3>
         <p>${a.description}</p>
+        ${a.harmTypes.length > 0 ? `
+          <div class="veille-harm">
+            ${a.harmTypes.map(h => `<span class="harm-tag">${h}</span>`).join("")}
+          </div>` : ""}
       </div>
       <div>
         <div class="veille-meta">${a.source} · ${a.date}</div>
-        <a class="veille-link" href="${a.link}" target="_blank" rel="noopener">Lire l'article →</a>
+        <a class="veille-link" href="${a.link}" target="_blank" rel="noopener">Voir l'incident →</a>
       </div>
     </div>
   `).join("");
@@ -154,8 +161,15 @@ function renderArticles(articles) {
 
 async function initVeille() {
   const grid = document.getElementById("veille-grid");
-  const results = await Promise.all(RSS_FEEDS.map(fetchFeed));
-  allArticles = results.flat().sort(() => Math.random() - 0.5);
+  grid.innerHTML = `<div class="veille-loading"><p>Chargement des articles...</p></div>`;
+
+  const [ia, cyber, dev] = await Promise.all([
+    fetchOCDE("artificial intelligence", "ia", "Intelligence Artificielle"),
+    fetchOCDE("cybersecurity", "cyber", "Cybersécurité"),
+    fetchOCDE("software", "dev", "Développement Web"),
+  ]);
+
+  allArticles = [...ia, ...cyber, ...dev];
 
   if (allArticles.length === 0) {
     grid.innerHTML = `<div class="veille-loading"><p>Impossible de charger les articles.</p></div>`;
