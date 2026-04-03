@@ -81,49 +81,32 @@ const RSS_FEEDS = [
   {
     category: "ia",
     label: "Intelligence Artificielle",
-    url: "https://hnrss.org/newest?q=artificial+intelligence&count=3",
-  },
-  {
-    category: "ia",
-    label: "Intelligence Artificielle",
-    url: "https://hnrss.org/newest?q=machine+learning&count=3",
+    url: "https://corsproxy.io/?https://hnrss.org/newest?q=artificial+intelligence&count=4",
   },
   {
     category: "cyber",
     label: "Cybersécurité",
-    url: "https://hnrss.org/newest?q=cybersecurity&count=3",
-  },
-  {
-    category: "cyber",
-    label: "Cybersécurité",
-    url: "https://hnrss.org/newest?q=security+vulnerability&count=3",
+    url: "https://corsproxy.io/?https://hnrss.org/newest?q=cybersecurity&count=4",
   },
   {
     category: "dev",
     label: "Développement Web",
-    url: "https://hnrss.org/newest?q=javascript&count=3",
-  },
-  {
-    category: "dev",
-    label: "Développement Web",
-    url: "https://hnrss.org/newest?q=web+development&count=3",
+    url: "https://corsproxy.io/?https://hnrss.org/newest?q=web+development&count=4",
   },
 ];
-
-const PROXY = "https://api.allorigins.win/get?url=";
 
 let allArticles = [];
 let activeCategory = "all";
 
 async function fetchFeed(feed) {
   try {
-    const res = await fetch(PROXY + encodeURIComponent(feed.url));
+    const res = await fetch(feed.url);
     if (!res.ok) return [];
-    const json = await res.json();
+    const text = await res.text();
 
     const parser = new DOMParser();
-    const xml = parser.parseFromString(json.contents, "text/xml");
-    const items = [...xml.querySelectorAll("item")].slice(0, 3);
+    const xml = parser.parseFromString(text, "text/xml");
+    const items = [...xml.querySelectorAll("item")].slice(0, 4);
 
     return items.map(item => ({
       category: feed.category,
