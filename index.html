@@ -176,23 +176,17 @@
 <section id="veille" class="reveal">
   <h2>🧠 Veille informatique</h2>
 
-  <div class="cards">
+  <div class="veille-filters">
+    <button class="veille-btn active" data-category="all">Tous</button>
+    <button class="veille-btn" data-category="ia">Intelligence Artificielle</button>
+    <button class="veille-btn" data-category="cyber">Cybersécurité</button>
+    <button class="veille-btn" data-category="dev">Développement Web</button>
+  </div>
 
-    <div class="card">
-      <h3>Intelligence Artificielle</h3>
-      <p>Suivi des avancées en IA (ChatGPT, automatisation, agents intelligents).</p>
+  <div id="veille-grid" class="cards">
+    <div class="veille-loading">
+      <p>Chargement des articles...</p>
     </div>
-
-    <div class="card">
-      <h3>Cybersécurité</h3>
-      <p>Étude des failles, attaques et bonnes pratiques de sécurité informatique.</p>
-    </div>
-
-    <div class="card">
-      <h3>Développement Web</h3>
-      <p>Évolution des frameworks modernes et des technologies front-end/back-end.</p>
-    </div>
-
   </div>
 </section>
 
