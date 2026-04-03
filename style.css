@@ -266,3 +266,55 @@ input, textarea {
 .card, .timeline-card, input, textarea {
   box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
+
+/* Nav lien actif */
+nav a.active {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Burger (mobile uniquement) */
+#burger {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  #burger { display: block; }
+  nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--bg);
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+  nav.open { display: flex; }
+}
+
+/* Bouton retour en haut */
+#back-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 9999;
+}
