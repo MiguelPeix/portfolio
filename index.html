@@ -23,7 +23,7 @@
 <header>
   <h1>Mon Portfolio</h1>
 
-  <nav>
+  <nav id="main-nav">
     <a href="#about">Parcours</a>
     <a href="#bts">BTS SIO</a>
     <a href="#skills">Compétences</a>
@@ -32,9 +32,14 @@
     <a href="#contact">Contact</a>
   </nav>
 
-  <button id="theme-toggle">🌙</button>
-  <button id="burger">☰</button>
+  <div class="header-right">
+    <button id="theme-toggle">🌙</button>
+    <button id="burger">☰</button>
+  </div>
 </header>
+
+<!-- back-top ICI, juste après le header, EN DEHORS -->
+<button id="back-top" title="Retour en haut">↑</button>
 
 <section class="hero reveal">
   <div class="hero-content">
@@ -213,6 +218,6 @@
 </footer>
 
 <script src="script.js"></script>
-<button id="back-top" title="Retour en haut">↑</button>
+
 </body>
 </html>

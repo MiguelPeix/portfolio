@@ -318,3 +318,9 @@ nav a.active {
   transition: opacity 0.3s;
   z-index: 9999;
 }
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

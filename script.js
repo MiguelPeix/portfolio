@@ -55,7 +55,7 @@ window.addEventListener("scroll", () => {
 
 // ─── Menu burger mobile ─────────────────────────────────────────────────────
 const burger = document.getElementById("burger");
-const nav = document.querySelector("nav");
+const nav = document.getElementById("main-nav");
 
 burger.onclick = () => {
   nav.classList.toggle("open");
