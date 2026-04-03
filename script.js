@@ -87,32 +87,32 @@ const RSS_FEEDS = [
   {
     category: "ia",
     label: "Intelligence Artificielle",
-    url: "https://rss.app/feeds/tOgNdRe2q5lJXEoY.xml", // MIT AI News
+    url: "https://feeds.feedburner.com/TheHackersNews",
   },
   {
     category: "ia",
     label: "Intelligence Artificielle",
-    url: "https://rss.app/feeds/vQxaZlZH3B4TrG5A.xml", // The Verge AI
+    url: "https://venturebeat.com/category/ai/feed/",
   },
   {
     category: "cyber",
     label: "Cybersécurité",
-    url: "https://rss.app/feeds/9Qz8Wk3LpYmXnE1R.xml", // Krebs on Security
+    url: "https://krebsonsecurity.com/feed/",
   },
   {
     category: "cyber",
     label: "Cybersécurité",
-    url: "https://rss.app/feeds/Hv7TmNqYjKpLsC2X.xml", // The Hacker News
+    url: "https://www.bleepingcomputer.com/feed/",
   },
   {
     category: "dev",
     label: "Développement Web",
-    url: "https://rss.app/feeds/uB6kPnWmZqYjEsL4.xml", // CSS-Tricks
+    url: "https://www.smashingmagazine.com/feed/",
   },
   {
     category: "dev",
     label: "Développement Web",
-    url: "https://rss.app/feeds/xR3nMvTqKpYjWsL8.xml", // Smashing Magazine
+    url: "https://css-tricks.com/feed/",
   },
 ];
 
@@ -125,8 +125,12 @@ let activeCategory = "all";
 async function fetchFeed(feed) {
   try {
     const res = await fetch(`${API}${encodeURIComponent(feed.url)}&count=3`);
+    if (!res.ok) return [];
     const data = await res.json();
-    if (data.status !== "ok") return [];
+    if (data.status !== "ok") {
+      console.warn("Feed KO :", feed.url, data.message);
+      return [];
+    }
     return data.items.map(item => ({
       category: feed.category,
       label: feed.label,
@@ -136,7 +140,8 @@ async function fetchFeed(feed) {
       date: item.pubDate ? new Date(item.pubDate).toLocaleDateString("fr-FR") : "",
       source: data.feed?.title || "",
     }));
-  } catch {
+  } catch (err) {
+    console.error("Erreur fetch :", feed.url, err);
     return [];
   }
 }
@@ -168,8 +173,15 @@ function renderArticles(articles) {
 }
 
 async function initVeille() {
+  const grid = document.getElementById("veille-grid");
   const results = await Promise.all(RSS_FEEDS.map(fetchFeed));
   allArticles = results.flat().sort(() => Math.random() - 0.5);
+
+  if (allArticles.length === 0) {
+    grid.innerHTML = `<div class="veille-loading"><p>Impossible de charger les articles. Vérifiez votre connexion.</p></div>`;
+    return;
+  }
+
   renderArticles(allArticles);
 }
 
