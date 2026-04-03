@@ -90,23 +90,11 @@ section:not(:last-child)::after {
   align-items: center;
   justify-content: center;
   padding: 80px 10%;
-  position: relative;
-  overflow: hidden;
-  background: transparent;
-}
-
-#hero-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+  background: radial-gradient(circle at top left, rgba(56,189,248,0.2), transparent 50%),
+              radial-gradient(circle at bottom right, rgba(14,165,233,0.15), transparent 50%);
 }
 
 .hero-content {
-  position: relative;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
