@@ -1,23 +1,20 @@
-// ─── Scroll reveal (fix : déclencher aussi au chargement) ───────────────────
+// ─── Scroll reveal ───────────────────────────────────────────────────────────
 const reveals = document.querySelectorAll(".reveal");
 
 function checkReveal() {
   reveals.forEach(el => {
-    const top = el.getBoundingClientRect().top;
-    if (top < window.innerHeight - 80) {
+    if (el.getBoundingClientRect().top < window.innerHeight - 80) {
       el.classList.add("active");
     }
   });
 }
-
 window.addEventListener("scroll", checkReveal);
-checkReveal(); // ← correction clé : la hero section s'affiche dès le chargement
+checkReveal();
 
 
-// ─── Dark mode ──────────────────────────────────────────────────────────────
+// ─── Dark mode ───────────────────────────────────────────────────────────────
 const toggle = document.getElementById("theme-toggle");
 
-// Sauvegarde la préférence
 if (localStorage.getItem("theme") === "light") {
   document.body.classList.add("light");
   toggle.textContent = "☀️";
@@ -31,19 +28,17 @@ toggle.onclick = () => {
 };
 
 
-// ─── Navigation active au scroll ────────────────────────────────────────────
+// ─── Navigation active au scroll ─────────────────────────────────────────────
 const sections = document.querySelectorAll("section[id]");
 const navLinks = document.querySelectorAll("nav a");
 
 window.addEventListener("scroll", () => {
   let current = "";
   sections.forEach(section => {
-    const top = section.offsetTop - 120;
-    if (window.scrollY >= top) {
+    if (window.scrollY >= section.offsetTop - 120) {
       current = section.getAttribute("id");
     }
   });
-
   navLinks.forEach(link => {
     link.classList.remove("active");
     if (link.getAttribute("href") === `#${current}`) {
@@ -53,7 +48,7 @@ window.addEventListener("scroll", () => {
 });
 
 
-// ─── Menu burger mobile ─────────────────────────────────────────────────────
+// ─── Menu burger mobile ───────────────────────────────────────────────────────
 const burger = document.getElementById("burger");
 const nav = document.getElementById("main-nav");
 
@@ -62,7 +57,6 @@ burger.onclick = () => {
   burger.textContent = nav.classList.contains("open") ? "✕" : "☰";
 };
 
-// Ferme le menu quand on clique sur un lien
 navLinks.forEach(link => {
   link.addEventListener("click", () => {
     nav.classList.remove("open");
@@ -71,7 +65,7 @@ navLinks.forEach(link => {
 });
 
 
-// ─── Bouton retour en haut ───────────────────────────────────────────────────
+// ─── Bouton retour en haut ────────────────────────────────────────────────────
 const backTop = document.getElementById("back-top");
 
 window.addEventListener("scroll", () => {
@@ -81,67 +75,70 @@ window.addEventListener("scroll", () => {
 
 backTop.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-// ─── Veille RSS ──────────────────────────────────────────────────────────────
 
+// ─── Veille RSS ───────────────────────────────────────────────────────────────
 const RSS_FEEDS = [
   {
     category: "ia",
     label: "Intelligence Artificielle",
-    url: "https://feeds.feedburner.com/TheHackersNews",
+    url: "https://hnrss.org/newest?q=artificial+intelligence&count=3",
   },
   {
     category: "ia",
     label: "Intelligence Artificielle",
-    url: "https://venturebeat.com/category/ai/feed/",
+    url: "https://hnrss.org/newest?q=machine+learning&count=3",
   },
   {
     category: "cyber",
     label: "Cybersécurité",
-    url: "https://krebsonsecurity.com/feed/",
+    url: "https://hnrss.org/newest?q=cybersecurity&count=3",
   },
   {
     category: "cyber",
     label: "Cybersécurité",
-    url: "https://www.bleepingcomputer.com/feed/",
+    url: "https://hnrss.org/newest?q=security+vulnerability&count=3",
   },
   {
     category: "dev",
     label: "Développement Web",
-    url: "https://www.smashingmagazine.com/feed/",
+    url: "https://hnrss.org/newest?q=javascript&count=3",
   },
   {
     category: "dev",
     label: "Développement Web",
-    url: "https://css-tricks.com/feed/",
+    url: "https://hnrss.org/newest?q=web+development&count=3",
   },
 ];
 
-// On utilise rss2json qui contourne le CORS
-const API = "https://api.rss2json.com/v1/api.json?rss_url=";
+const PROXY = "https://api.allorigins.win/get?url=";
 
 let allArticles = [];
 let activeCategory = "all";
 
 async function fetchFeed(feed) {
   try {
-    const res = await fetch(`${API}${encodeURIComponent(feed.url)}&count=3`);
+    const res = await fetch(PROXY + encodeURIComponent(feed.url));
     if (!res.ok) return [];
-    const data = await res.json();
-    if (data.status !== "ok") {
-      console.warn("Feed KO :", feed.url, data.message);
-      return [];
-    }
-    return data.items.map(item => ({
+    const json = await res.json();
+
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(json.contents, "text/xml");
+    const items = [...xml.querySelectorAll("item")].slice(0, 3);
+
+    return items.map(item => ({
       category: feed.category,
       label: feed.label,
-      title: item.title,
-      description: item.description?.replace(/<[^>]*>/g, "").slice(0, 150) + "…",
-      link: item.link,
-      date: item.pubDate ? new Date(item.pubDate).toLocaleDateString("fr-FR") : "",
-      source: data.feed?.title || "",
+      title: item.querySelector("title")?.textContent || "",
+      description: item.querySelector("description")?.textContent
+        ?.replace(/<[^>]*>/g, "").slice(0, 150) + "…",
+      link: item.querySelector("link")?.textContent || "",
+      date: item.querySelector("pubDate")?.textContent
+        ? new Date(item.querySelector("pubDate").textContent).toLocaleDateString("fr-FR")
+        : "",
+      source: xml.querySelector("channel > title")?.textContent || "",
     }));
   } catch (err) {
-    console.error("Erreur fetch :", feed.url, err);
+    console.error("Erreur feed :", feed.url, err);
     return [];
   }
 }
@@ -178,14 +175,13 @@ async function initVeille() {
   allArticles = results.flat().sort(() => Math.random() - 0.5);
 
   if (allArticles.length === 0) {
-    grid.innerHTML = `<div class="veille-loading"><p>Impossible de charger les articles. Vérifiez votre connexion.</p></div>`;
+    grid.innerHTML = `<div class="veille-loading"><p>Impossible de charger les articles.</p></div>`;
     return;
   }
 
   renderArticles(allArticles);
 }
 
-// Filtres
 document.querySelectorAll(".veille-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".veille-btn").forEach(b => b.classList.remove("active"));
