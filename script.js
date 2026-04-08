@@ -77,7 +77,6 @@ backTop.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
 
 // ─── Veille — API OCDE ────────────────────────────────────────────────────────
-let activeSearch = "";
 
 function dateENtoFR(date) {
   const list = date.split('-');
@@ -89,10 +88,27 @@ function dateENtoFR(date) {
   return `${list[2]} ${mois[list[1]]} ${list[0]}`;
 }
 
-async function fetchOCDE() {
+function getDateNow() {
+  const date = new Date();
+  let jour = date.getUTCDate().toString().padStart(2, "0");
+  let mois = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+  return `${date.getFullYear()}-${mois}-${jour}`;
+}
+
+// Date par défaut = aujourd'hui
+document.getElementById("dateSelect").value = getDateNow();
+
+async function updateOCDE() {
+  const grid = document.getElementById("veille-grid");
+  const filtre = document.getElementById("filtreVeille").value.trim();
+  const date = document.getElementById("dateSelect").value || getDateNow();
+
+  grid.innerHTML = `<div class="veille-loading"><p>Chargement des articles...</p></div>`;
+  document.getElementById("nbResultOCDE").textContent = "0";
+
   try {
     const terms = [];
-    if (activeSearch) terms.push({ type: "KEYWORD", value: activeSearch });
+    if (filtre) terms.push({ type: "KEYWORD", value: filtre });
 
     const res = await fetch('https://incidents-server.oecdai.org/api/v1/incidents/fetch-incidents', {
       method: 'POST',
@@ -102,7 +118,7 @@ async function fetchOCDE() {
         countries: [],
         format: 'JSON',
         from_date: "1900-01-01",
-        to_date: new Date().toISOString().split('T')[0],
+        to_date: date,
         num_results: 12,
         order_by: 'date',
         properties_config: {
@@ -113,65 +129,49 @@ async function fetchOCDE() {
         search_terms: terms
       })
     });
+
     const data = await res.json();
-    document.getElementById("nbResultOCDE").textContent = data.total_results ?? 0;
-    return (data.incidents || []).map(item => ({
-      title: item.title || "",
-      description: item.summary?.slice(0, 150) + "…" || "",
-      date: item.date ? dateENtoFR(item.date) : "",
-      link: `https://oecd.ai/en/incidents/${item.id}`,
-      harmTypes: item.properties?.harm_types || [],
-    }));
+    const articles = data.incidents || [];
+    document.getElementById("nbResultOCDE").textContent = data.total_results ?? articles.length;
+
+    if (articles.length === 0) {
+      grid.innerHTML = `<div class="veille-loading"><p>Aucun article trouvé avec ces critères.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = articles.map(item => {
+      const harmTypes = item.properties?.harm_types || [];
+      return `
+        <div class="card veille-article">
+          <div>
+            <h3>${item.title || ""}</h3>
+            <p>${(item.summary?.slice(0, 150) || "") + "…"}</p>
+            ${harmTypes.length > 0 ? `
+              <div class="veille-harm">
+                ${harmTypes.map(h => `<span class="harm-tag">${h}</span>`).join("")}
+              </div>` : ""}
+          </div>
+          <div>
+            <div class="veille-meta">OCDE AI Incidents · ${item.date ? dateENtoFR(item.date) : ""}</div>
+            <a class="veille-link" href="https://oecd.ai/en/incidents/${item.id}" target="_blank" rel="noopener">Voir l'incident →</a>
+          </div>
+        </div>
+      `;
+    }).join("");
+
   } catch (err) {
     console.error("Erreur OCDE :", err);
-    return [];
+    grid.innerHTML = `<div class="veille-loading"><p>Impossible de charger les articles.</p></div>`;
   }
 }
 
-function renderArticles(articles) {
-  const grid = document.getElementById("veille-grid");
+// Bouton rechercher
+document.getElementById("sendFiltreVeille").addEventListener("click", updateOCDE);
 
-  if (articles.length === 0) {
-    grid.innerHTML = `<div class="veille-loading"><p>Aucun article trouvé avec ces critères.</p></div>`;
-    return;
-  }
-
-  grid.innerHTML = articles.map(a => `
-    <div class="card veille-article">
-      <div>
-        <h3>${a.title}</h3>
-        <p>${a.description}</p>
-        ${a.harmTypes.length > 0 ? `
-          <div class="veille-harm">
-            ${a.harmTypes.map(h => `<span class="harm-tag">${h}</span>`).join("")}
-          </div>` : ""}
-      </div>
-      <div>
-        <div class="veille-meta">OCDE AI Incidents · ${a.date}</div>
-        <a class="veille-link" href="${a.link}" target="_blank" rel="noopener">Voir l'incident →</a>
-      </div>
-    </div>
-  `).join("");
-}
-
-async function initVeille() {
-  const grid = document.getElementById("veille-grid");
-  grid.innerHTML = `<div class="veille-loading"><p>Chargement des articles...</p></div>`;
-  document.getElementById("nbResultOCDE").textContent = "0";
-  const articles = await fetchOCDE();
-  renderArticles(articles);
-}
-
-document.getElementById("sendFiltreVeille").addEventListener("click", () => {
-  activeSearch = document.getElementById("filtreVeille").value.trim();
-  initVeille();
-});
-
+// Touche Entrée dans le champ texte
 document.getElementById("filtreVeille").addEventListener("keypress", e => {
-  if (e.key === "Enter") {
-    activeSearch = e.target.value.trim();
-    initVeille();
-  }
+  if (e.key === "Enter") updateOCDE();
 });
 
-initVeille();
+// Chargement initial
+updateOCDE();

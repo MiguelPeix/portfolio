@@ -397,3 +397,58 @@ nav a.active {
   color: #ef4444;
   border: 1px solid rgba(239, 68, 68, 0.25);
 }
+
+.veille-intro {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin-bottom: 24px;
+  max-width: 700px;
+  line-height: 1.7;
+}
+
+.veille-search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.veille-search input {
+  flex: 1;
+  min-width: 160px;
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 2px solid var(--primary);
+  background: var(--input);
+  color: var(--text);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  transition: 0.2s;
+}
+
+.veille-search input[type="date"] {
+  flex: 0 0 auto;
+  min-width: 150px;
+  cursor: pointer;
+}
+
+.veille-search input:focus {
+  box-shadow: 0 0 0 3px rgba(56,189,248,0.2);
+}
+
+.veille-search button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 2px solid var(--primary);
+  background: var(--primary);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.veille-search button:hover {
+  opacity: 0.85;
+}
