@@ -326,24 +326,6 @@ nav a.active {
 }
 
 /* VEILLE */
-.veille-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 30px;
-}
-
-.veille-btn {
-  padding: 8px 18px;
-  border-radius: 20px;
-  border: 2px solid var(--primary);
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  font-size: 0.85rem;
-  transition: 0.2s;
-}
 
 .veille-btn:hover,
 .veille-btn.active {
@@ -357,19 +339,6 @@ nav a.active {
   justify-content: space-between;
   gap: 10px;
 }
-
-.veille-article .badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-size: 0.72rem;
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-
-.badge-ia    { background: rgba(56,189,248,0.15); color: var(--primary); }
-.badge-cyber { background: rgba(239,68,68,0.15);  color: #ef4444; }
-.badge-dev   { background: rgba(34,197,94,0.15);  color: #22c55e; }
 
 .veille-article h3 {
   font-size: 0.95rem;

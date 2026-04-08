@@ -76,10 +76,8 @@ window.addEventListener("scroll", () => {
 backTop.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
 
-// ─── Veille RSS — API OCDE Incidents IA ──────────────────────────────────────
-
-let allArticles = [];
-let activeCategory = "all";
+// ─── Veille — API OCDE ────────────────────────────────────────────────────────
+let activeSearch = "";
 
 function dateENtoFR(date) {
   const list = date.split('-');
@@ -91,8 +89,11 @@ function dateENtoFR(date) {
   return `${list[2]} ${mois[list[1]]} ${list[0]}`;
 }
 
-async function fetchOCDE(searchTerm, category, label) {
+async function fetchOCDE() {
   try {
+    const terms = [];
+    if (activeSearch) terms.push({ type: "KEYWORD", value: activeSearch });
+
     const res = await fetch('https://incidents-server.oecdai.org/api/v1/incidents/fetch-incidents', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -102,24 +103,22 @@ async function fetchOCDE(searchTerm, category, label) {
         format: 'JSON',
         from_date: "1900-01-01",
         to_date: new Date().toISOString().split('T')[0],
-        num_results: 4,
+        num_results: 12,
         order_by: 'date',
         properties_config: {
           ai_tasks: [], autonomy_levels: [], business_functions: [],
           harm_levels: [], harm_types: [], harmed_entities: [],
           industries: [], languages: [], principles: []
         },
-        search_terms: searchTerm ? [{ type: "KEYWORD", value: searchTerm }] : []
+        search_terms: terms
       })
     });
     const data = await res.json();
+    document.getElementById("nbResultOCDE").textContent = data.total_results ?? 0;
     return (data.incidents || []).map(item => ({
-      category,
-      label,
       title: item.title || "",
       description: item.summary?.slice(0, 150) + "…" || "",
       date: item.date ? dateENtoFR(item.date) : "",
-      source: "OCDE AI Incidents",
       link: `https://oecd.ai/en/incidents/${item.id}`,
       harmTypes: item.properties?.harm_types || [],
     }));
@@ -131,19 +130,15 @@ async function fetchOCDE(searchTerm, category, label) {
 
 function renderArticles(articles) {
   const grid = document.getElementById("veille-grid");
-  const filtered = activeCategory === "all"
-    ? articles
-    : articles.filter(a => a.category === activeCategory);
 
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div class="veille-loading"><p>Aucun article disponible.</p></div>`;
+  if (articles.length === 0) {
+    grid.innerHTML = `<div class="veille-loading"><p>Aucun article trouvé avec ces critères.</p></div>`;
     return;
   }
 
-  grid.innerHTML = filtered.map(a => `
-    <div class="card veille-article" data-category="${a.category}">
+  grid.innerHTML = articles.map(a => `
+    <div class="card veille-article">
       <div>
-        <span class="badge badge-${a.category}">${a.label}</span>
         <h3>${a.title}</h3>
         <p>${a.description}</p>
         ${a.harmTypes.length > 0 ? `
@@ -152,7 +147,7 @@ function renderArticles(articles) {
           </div>` : ""}
       </div>
       <div>
-        <div class="veille-meta">${a.source} · ${a.date}</div>
+        <div class="veille-meta">OCDE AI Incidents · ${a.date}</div>
         <a class="veille-link" href="${a.link}" target="_blank" rel="noopener">Voir l'incident →</a>
       </div>
     </div>
@@ -162,30 +157,21 @@ function renderArticles(articles) {
 async function initVeille() {
   const grid = document.getElementById("veille-grid");
   grid.innerHTML = `<div class="veille-loading"><p>Chargement des articles...</p></div>`;
-
-  const [ia, cyber, dev] = await Promise.all([
-    fetchOCDE("artificial intelligence", "ia", "Intelligence Artificielle"),
-    fetchOCDE("cybersecurity", "cyber", "Cybersécurité"),
-    fetchOCDE("software", "dev", "Développement Web"),
-  ]);
-
-  allArticles = [...ia, ...cyber, ...dev];
-
-  if (allArticles.length === 0) {
-    grid.innerHTML = `<div class="veille-loading"><p>Impossible de charger les articles.</p></div>`;
-    return;
-  }
-
-  renderArticles(allArticles);
+  document.getElementById("nbResultOCDE").textContent = "0";
+  const articles = await fetchOCDE();
+  renderArticles(articles);
 }
 
-document.querySelectorAll(".veille-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".veille-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    activeCategory = btn.dataset.category;
-    renderArticles(allArticles);
-  });
+document.getElementById("sendFiltreVeille").addEventListener("click", () => {
+  activeSearch = document.getElementById("filtreVeille").value.trim();
+  initVeille();
+});
+
+document.getElementById("filtreVeille").addEventListener("keypress", e => {
+  if (e.key === "Enter") {
+    activeSearch = e.target.value.trim();
+    initVeille();
+  }
 });
 
 initVeille();

@@ -178,17 +178,17 @@
 <section id="veille" class="reveal">
   <h2>🧠 Veille informatique</h2>
 
-  <div class="veille-filters">
-    <button class="veille-btn active" data-category="all">Tous</button>
-    <button class="veille-btn" data-category="ia">Intelligence Artificielle</button>
-    <button class="veille-btn" data-category="cyber">Cybersécurité</button>
-    <button class="veille-btn" data-category="dev">Développement Web</button>
+  <div class="veille-search">
+    <input type="text" id="filtreVeille" placeholder="Rechercher un incident...">
+    <button id="sendFiltreVeille">Rechercher</button>
   </div>
 
+  <p class="veille-count">
+    <span id="nbResultOCDE">0</span> résultat(s) trouvé(s)
+  </p>
+
   <div id="veille-grid" class="cards">
-    <div class="veille-loading">
-      <p>Chargement des articles...</p>
-    </div>
+    <div class="veille-loading"><p>Chargement des articles...</p></div>
   </div>
 </section>
 
