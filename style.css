@@ -532,3 +532,12 @@ nav a.active {
 .project-links a:hover {
   text-decoration: underline;
 }
+
+.project-unavailable {
+  font-size: 0.78rem;
+  opacity: 0.5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
