@@ -541,3 +541,29 @@ nav a.active {
   gap: 6px;
   margin: 0;
 }
+
+.btn-synthese {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+
+.btn-synthese:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .btn-synthese span {
+    display: none;
+  }
+}
