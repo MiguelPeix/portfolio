@@ -567,3 +567,54 @@ nav a.active {
     display: none;
   }
 }
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+
+.hero-about {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  opacity: 0.85;
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hero-btn-primary {
+  padding: 12px 24px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.hero-btn-primary:hover {
+  opacity: 0.85;
+}
+
+.hero-btn-secondary {
+  padding: 12px 24px;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+.hero-btn-secondary:hover {
+  background: var(--primary);
+  color: #fff;
+}
